@@ -1,12 +1,9 @@
-# ================================================================
-# PROJECT 3 : AI Supply Chain Delay Prediction
+
+# PROJECT  : AI Supply Chain Delay Prediction
 # Domain    : Logistics / Supply Chain
 # AI Angle  : Random Forest classifier predicts shipment delay
 #             BEFORE it departs — enabling proactive rerouting.
 # CSVs Used : csv/shipments.csv | csv/suppliers.csv | csv/routes.csv
-#
-# RUN: python supply_chain_delay.py
-# ================================================================
 
 import os, warnings
 import pandas as pd
@@ -31,7 +28,7 @@ print("=" * 58)
 print("  PROJECT 3 — AI Supply Chain Delay Prediction")
 print("=" * 58)
 
-# ── 1. LOAD DATA ───────────────────────────────────────────
+#  1. LOAD DATA 
 shipments = pd.read_csv(os.path.join(CSV, 'shipments.csv'), parse_dates=['order_date'])
 suppliers = pd.read_csv(os.path.join(CSV, 'suppliers.csv'))
 routes    = pd.read_csv(os.path.join(CSV, 'routes.csv'))
@@ -47,7 +44,7 @@ print(f"\n✅  Loaded  →  shipments: {len(shipments):,}  |  "
 print(f"    Overall delay rate : {df['is_delayed'].mean():.1%}")
 print(f"    Total order value  : ₹{df['order_value'].sum():,.0f}")
 
-# ── 2. EXPLORATORY ANALYSIS ────────────────────────────────
+#  2. EXPLORATORY ANALYSIS 
 print("\n--- Delay Rate by Transport Mode ---")
 mode_delay = df.groupby('transport_mode')['is_delayed'].agg(['mean','count']).round(3)
 mode_delay.columns = ['delay_rate','shipments']
@@ -68,7 +65,7 @@ sup_delay.columns = ['supplier_id','country','tier','reliability','delay_rate','
 sup_delay['delay_rate'] = (sup_delay['delay_rate']*100).round(1)
 print(sup_delay.to_string(index=False))
 
-# ── 3. FEATURE ENGINEERING ─────────────────────────────────
+# 3. FEATURE ENGINEERING 
 le = LabelEncoder()
 df['transport_enc']  = le.fit_transform(df['transport_mode'])
 df['tier_enc']       = le.fit_transform(df['tier'])
@@ -100,7 +97,7 @@ scaler   = StandardScaler()
 X_tr_sc  = scaler.fit_transform(X_train)
 X_te_sc  = scaler.transform(X_test)
 
-# ── 4. TRAIN MULTIPLE AI MODELS ────────────────────────────
+#  4. TRAIN MULTIPLE AI MODELS
 print("\n--- Training AI Models ---")
 models = {
     'Random Forest':       RandomForestClassifier(n_estimators=200, max_depth=8,
@@ -133,7 +130,7 @@ best      = results[best_name]
 best_model= best['model']
 print(f"\n  🏆  Best Model: {best_name}  (AUC = {best['auc']:.3f})")
 
-# ── 5. FEATURE IMPORTANCE ──────────────────────────────────
+#  5. FEATURE IMPORTANCE 
 if hasattr(best_model, 'feature_importances_'):
     feat_imp = pd.Series(best_model.feature_importances_, index=feature_cols).sort_values(ascending=False)
     print("\n--- Top 10 Delay Predictors ---")
@@ -141,7 +138,7 @@ if hasattr(best_model, 'feature_importances_'):
         bar = '█' * int(imp * 200)
         print(f"  {feat:<22} {bar:<20} {imp:.3f}")
 
-# ── 6. RISK SCORING NEW SHIPMENTS ──────────────────────────
+#  6. RISK SCORING NEW SHIPMENTS 
 # Score on test set
 risk_df = X_test.copy()
 risk_df['delay_probability'] = best['y_prob']
@@ -157,7 +154,7 @@ risk_summary = risk_df.groupby('risk_level').agg(
 print("\n--- Risk Score Distribution ---")
 print(risk_summary.to_string())
 
-# ── 7. FINANCIAL IMPACT SIMULATION ─────────────────────────
+#  7. FINANCIAL IMPACT SIMULATION 
 delay_cost_per_day = 50   # ₹ holding cost per day per shipment
 df_test = df.iloc[X_test.index.tolist()].copy()
 df_test['delay_prob'] = best['y_prob']
@@ -171,7 +168,7 @@ print(f"  Delays caught early (TP) : {len(caught_early):>4} shipments")
 print(f"  Delays missed (FN)       : {len(missed_delays):>4} shipments")
 print(f"  Estimated savings (₹{delay_cost_per_day}/day): ₹{savings:,.0f}")
 
-# ── 8. VISUALISATIONS ──────────────────────────────────────
+#  8. VISUALISATIONS 
 fig = plt.figure(figsize=(20, 13))
 fig.suptitle("PROJECT 3 — AI Supply Chain Delay Prediction Dashboard", fontsize=15, fontweight='bold')
 gs = gridspec.GridSpec(2, 3, figure=fig, hspace=0.42, wspace=0.38)
@@ -244,7 +241,7 @@ plt.savefig(os.path.join(OUT, 'p3_supply_chain_dashboard.png'), dpi=150, bbox_in
 plt.close()
 print("\n✅  Dashboard saved → p3_supply_chain_dashboard.png")
 
-# ── 9. EXPORT OUTPUTS ──────────────────────────────────────
+#  9. EXPORT OUTPUTS 
 # Risk-scored shipments
 risk_output = df_test[['shipment_id','supplier_id','transport_mode',
                         'order_value','expected_days','is_delayed']].copy()
