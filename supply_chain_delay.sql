@@ -1,20 +1,13 @@
--- ================================================================
--- PROJECT 3 : AI Supply Chain Delay Prediction
+
+-- PROJECT  : AI Supply Chain Delay Prediction
 -- Domain    : Logistics / Supply Chain
 -- AI Angle  : SQL finds delay patterns by supplier, route, transport;
 --             Python trains a classifier to predict delay BEFORE it
 --             happens — enabling proactive rerouting decisions.
 -- CSVs Used : shipments.csv | suppliers.csv | routes.csv
---
--- HOW TO LOAD:
---   \COPY suppliers FROM 'csv/suppliers.csv' CSV HEADER;
---   \COPY routes    FROM 'csv/routes.csv'    CSV HEADER;
---   \COPY shipments FROM 'csv/shipments.csv' CSV HEADER;
--- ================================================================
 
--- ──────────────────────────────────────────────
+
 -- STEP 0 : TABLE DEFINITIONS
--- ──────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS suppliers (
     supplier_id       INT PRIMARY KEY,
     supplier_name     VARCHAR(30),
@@ -54,9 +47,9 @@ CREATE TABLE IF NOT EXISTS shipments (
     transport_mode   VARCHAR(10)
 );
 
--- ──────────────────────────────────────────────
+ 
 -- STEP 1 : OVERALL DELAY SUMMARY
--- ──────────────────────────────────────────────
+
 SELECT
     COUNT(*)                                           AS total_shipments,
     SUM(is_delayed)                                    AS delayed_shipments,
@@ -66,9 +59,9 @@ SELECT
     SUM(CASE WHEN is_delayed=1 THEN order_value END)   AS value_at_risk
 FROM shipments;
 
--- ──────────────────────────────────────────────
+
 -- STEP 2 : DELAY RATE BY TRANSPORT MODE
--- ──────────────────────────────────────────────
+
 SELECT
     transport_mode,
     COUNT(*)                                     AS total,
@@ -80,9 +73,9 @@ FROM shipments
 GROUP BY transport_mode
 ORDER BY delay_rate_pct DESC;
 
--- ──────────────────────────────────────────────
+
 -- STEP 3 : WORST SUPPLIERS BY DELAY RATE
--- ──────────────────────────────────────────────
+
 SELECT
     su.supplier_id,
     su.supplier_name,
@@ -103,10 +96,10 @@ GROUP BY su.supplier_id, su.supplier_name, su.country, su.tier, su.reliability_s
 ORDER BY delay_rate_pct DESC
 LIMIT 15;
 
--- ──────────────────────────────────────────────
+
 -- STEP 4 : DELAY ROOT CAUSE ANALYSIS
 -- (Which risk factors matter most?)
--- ──────────────────────────────────────────────
+
 SELECT
     'Weather Risk'      AS risk_factor,
     SUM(CASE WHEN weather_risk=1 THEN is_delayed ELSE 0 END)    AS delayed_with_factor,
@@ -137,9 +130,9 @@ SELECT 'Demand Spike',
 FROM shipments
 ORDER BY delay_rate_pct DESC;
 
--- ──────────────────────────────────────────────
+
 -- STEP 5 : ROUTE PERFORMANCE ANALYSIS
--- ──────────────────────────────────────────────
+
 SELECT
     r.route_id,
     r.origin_city,
@@ -156,9 +149,9 @@ JOIN shipments sh ON r.route_id = sh.route_id
 GROUP BY r.route_id, r.origin_city, r.dest_city, r.transport_mode, r.distance_km, r.avg_days
 ORDER BY delay_rate_pct DESC;
 
--- ──────────────────────────────────────────────
+
 -- STEP 6 : MONTHLY DELAY TREND
--- ──────────────────────────────────────────────
+
 SELECT
     TO_CHAR(order_date, 'YYYY-MM')               AS month,
     COUNT(*)                                     AS total_shipments,
@@ -174,9 +167,9 @@ FROM shipments
 GROUP BY month
 ORDER BY month;
 
--- ──────────────────────────────────────────────
+
 -- STEP 7 : FINANCIAL IMPACT OF DELAYS
--- ──────────────────────────────────────────────
+
 SELECT
     product_category,
     COUNT(*)                                    AS total_shipments,
@@ -189,10 +182,10 @@ FROM shipments
 GROUP BY product_category
 ORDER BY delayed_order_value DESC;
 
--- ──────────────────────────────────────────────
+
 -- STEP 8 : AI PREDICTION INPUT VIEW
 -- (This is the feature set fed to the Python model)
--- ──────────────────────────────────────────────
+
 SELECT
     sh.shipment_id,
     su.reliability_score,
