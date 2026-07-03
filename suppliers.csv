@@ -1,0 +1,31 @@
+supplier_id,supplier_name,country,reliability_score,avg_lead_days,category,tier
+1,Supplier_01,Germany,0.77,4,Raw Material,Tier2
+2,Supplier_02,India,0.69,9,Electronics,Tier2
+3,Supplier_03,US,0.88,14,Raw Material,Tier2
+4,Supplier_04,India,0.76,9,Textile,Tier2
+5,Supplier_05,India,0.65,3,Textile,Tier3
+6,Supplier_06,Vietnam,0.69,7,Electronics,Tier1
+7,Supplier_07,Vietnam,0.88,14,Textile,Tier3
+8,Supplier_08,China,0.63,28,Packaging,Tier2
+9,Supplier_09,India,0.77,10,Textile,Tier2
+10,Supplier_10,Germany,0.93,19,Packaging,Tier3
+11,Supplier_11,China,0.94,20,Electronics,Tier1
+12,Supplier_12,China,0.95,13,Packaging,Tier1
+13,Supplier_13,Vietnam,0.88,6,Textile,Tier1
+14,Supplier_14,China,0.76,17,Electronics,Tier2
+15,Supplier_15,India,0.75,20,Textile,Tier2
+16,Supplier_16,US,0.98,16,Textile,Tier2
+17,Supplier_17,China,0.88,19,Raw Material,Tier1
+18,Supplier_18,India,0.61,17,Raw Material,Tier3
+19,Supplier_19,India,0.66,3,Raw Material,Tier1
+20,Supplier_20,Vietnam,0.67,20,Electronics,Tier2
+21,Supplier_21,India,0.89,16,Electronics,Tier3
+22,Supplier_22,China,0.73,18,Electronics,Tier2
+23,Supplier_23,US,0.86,12,Textile,Tier2
+24,Supplier_24,India,0.52,5,Packaging,Tier2
+25,Supplier_25,India,0.83,16,Textile,Tier3
+26,Supplier_26,Vietnam,0.66,29,Packaging,Tier2
+27,Supplier_27,India,0.61,20,Raw Material,Tier2
+28,Supplier_28,India,0.83,15,Packaging,Tier1
+29,Supplier_29,India,0.55,27,Textile,Tier1
+30,Supplier_30,Germany,0.83,16,Packaging,Tier2

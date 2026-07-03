@@ -1,0 +1,16 @@
+route_id,origin_city,dest_city,distance_km,transport_mode,avg_days,toll_cost
+1,Hanoi,Hyderabad,6345,Sea,8,1651
+2,Hanoi,Hyderabad,4057,Air,16,3447
+3,Hanoi,Chennai,5838,Road,6,4008
+4,Hamburg,Chennai,4484,Road,21,4048
+5,LA,Hyderabad,6161,Rail,13,2017
+6,LA,Hyderabad,1394,Road,6,1207
+7,Shenzhen,Hyderabad,4269,Rail,7,2690
+8,Mumbai,Bangalore,4250,Sea,17,746
+9,LA,Chennai,7260,Road,10,3059
+10,Shenzhen,Bangalore,3038,Air,13,4359
+11,LA,Delhi,2893,Road,23,2133
+12,LA,Hyderabad,3442,Road,23,963
+13,LA,Delhi,2687,Road,13,1046
+14,Mumbai,Bangalore,6749,Road,2,2834
+15,Mumbai,Delhi,6572,Rail,14,4139
